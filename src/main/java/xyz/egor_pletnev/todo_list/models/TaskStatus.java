@@ -1,21 +1,17 @@
 package xyz.egor_pletnev.todo_list.models;
 
-import jakarta.persistence.*;
 import lombok.Getter;
-import lombok.Setter;
 
-@Entity
-@Table(name = "task_statuses")
 @Getter
-@Setter
-public class TaskStatus {
+public enum TaskStatus {
+    NEW("Новая задача"),
+    IN_PROGRESS("В работе"),
+    DONE("Готова"),
+    CANCELLED("Отменена");
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private final String title;
 
-    @Column(nullable = false, unique = true)
-    private String name;
-
-    private String description;
+    TaskStatus(String title) {
+        this.title = title;
+    }
 }
