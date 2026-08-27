@@ -7,7 +7,8 @@ public enum TaskStatus {
     NEW("Новая задача"),
     IN_PROGRESS("В работе"),
     DONE("Готова"),
-    CANCELLED("Отменена");
+    CANCELLED("Отменена"),
+    DELETED("Удалено");
 
     private final String title;
 

@@ -24,9 +24,12 @@ public class Task {
 
     private String description;
 
+    @Column(nullable = false)
+    private Integer priority;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
-    private TaskStatus status = TaskStatus.NEW;
+    private TaskStatus status;
 
     @Column(name = "is_outdoor")
     private Boolean isOutdoor;
