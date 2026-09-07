@@ -35,19 +35,28 @@ public class Task {
     private Boolean isOutdoor;
 
     @Column(name = "required_weather")
-    private String requiredWeather;
+    private WeatherStatus requiredWeather;
+
+    @Column(name = "latitude")
+    private Double latitude;
+
+    @Column(name = "longitude")
+    private Double longitude;
 
     @Column(name = "required_min_temp")
-    private Integer minTemp;
+    private Double minTemp;
 
     @Column(name = "required_max_temp")
-    private Integer maxTemp;
+    private Double maxTemp;
 
     @Column(name = "forecast_weather")
-    private String forecastWeather;
+    private WeatherStatus forecastWeather;
 
     @Column(name = "forecast_temp")
-    private Integer forecastTemp;
+    private Double forecastTemp;
+
+    @Column(name = "due_date")
+    private LocalDateTime dueDate;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();

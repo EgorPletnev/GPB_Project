@@ -1,8 +1,7 @@
 package xyz.egor_pletnev.todo_list.models;
 
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonValue;
 
-@Getter
 public enum TaskStatus {
     NEW("Новая задача"),
     IN_PROGRESS("В работе"),
@@ -15,4 +14,7 @@ public enum TaskStatus {
     TaskStatus(String title) {
         this.title = title;
     }
+
+    @JsonValue
+    public String getTitle() {return title;}
 }
