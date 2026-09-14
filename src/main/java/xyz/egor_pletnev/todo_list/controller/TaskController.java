@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import xyz.egor_pletnev.todo_list.dto.*;
 import xyz.egor_pletnev.todo_list.service.TaskService;
 
-// TODO: сразу передать taskService в .body()Ы
 @RestController
 @RequestMapping("/api/tasks")
 @RequiredArgsConstructor
@@ -28,11 +27,9 @@ public class TaskController {
             TaskCreateRequest request
     ) {
 
-        TaskCreateResponse response = taskService.createTask(request);
-
         return ResponseEntity
                 .ok()
-                .body(response);
+                .body(taskService.createTask(request));
     }
 
 
@@ -44,10 +41,9 @@ public class TaskController {
             @RequestBody
             TaskEditRequest request
     ) {
-        TaskEditResponse response = taskService.editTask(request);
         return ResponseEntity
                 .ok()
-                .body(response);
+                .body(taskService.editTask(request));
     }
 
     @ApiResponses({
@@ -61,25 +57,23 @@ public class TaskController {
             @RequestBody
             TaskDeleteRequest request
     ) {
-        TaskDeleteResponse response = taskService.deleteTasks(request);
         return ResponseEntity
                 .ok()
-                .body(response);
+                .body(taskService.deleteTasks(request));
     }
 
 
     @ApiResponse(responseCode = "200", description = "Задачи успешно возвращены")
     @Operation(summary = "Возвращает задачи отсортированные по фильтрам")
     @GetMapping
-    public ResponseEntity<?> getAllTasks(
+    public ResponseEntity<GetTasksResponse> getAllTasks(
             @Valid
             @ModelAttribute
             TaskFilterRequest filter
     ) {
-        GetTasksResponse response = taskService.getTasks(filter);
 
         return ResponseEntity
                 .ok()
-                .body(response);
+                .body(taskService.getTasks(filter));
     }
 }

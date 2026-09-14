@@ -11,6 +11,8 @@ public record TaskEditRequest(
         @NotBlank
         String id,
 
+        Integer priority,
+
         String title,
         String description,
         Boolean isOutdoor,
@@ -25,5 +27,8 @@ public record TaskEditRequest(
         Double maxTemp,
 
         WeatherStatus requiredWeather,
-        LocalDateTime dueDate
+        LocalDateTime dueDate,
+
+        WeatherStatus forecastWeather,
+        Double forecastTemp
 ) { }

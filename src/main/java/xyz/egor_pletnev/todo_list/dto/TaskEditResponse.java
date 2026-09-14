@@ -10,6 +10,8 @@ public record TaskEditResponse (
         String description,
         Boolean isOutdoor,
 
+        Integer priority,
+
         Double latitude,
         Double longitude,
 

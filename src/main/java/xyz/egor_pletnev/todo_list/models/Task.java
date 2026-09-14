@@ -3,6 +3,8 @@ package xyz.egor_pletnev.todo_list.models;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -60,4 +62,7 @@ public class Task {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "update_at")
+    private LocalDateTime updateAt;
 }

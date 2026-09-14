@@ -9,6 +9,11 @@ import java.time.LocalDateTime;
 
 public record TaskCreateRequest(
         @NotBlank
+        String userId,
+
+        Integer priority,
+
+        @NotBlank
         @Size(max = 100)
         String title,
 
@@ -28,5 +33,8 @@ public record TaskCreateRequest(
         Double maxTemp,
 
         WeatherStatus requiredWeather,
-        LocalDateTime dueDate
+        LocalDateTime dueDate,
+
+        WeatherStatus forecastWeather,
+        Double forecastTemp
 ) {}

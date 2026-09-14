@@ -35,4 +35,7 @@ public class User {
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    @Column(name = "update_at")
+    private LocalDateTime updateAt;
 }

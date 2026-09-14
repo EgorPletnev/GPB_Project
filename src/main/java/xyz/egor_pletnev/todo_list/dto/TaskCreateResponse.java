@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Size;
 import xyz.egor_pletnev.todo_list.models.TaskStatus;
 import xyz.egor_pletnev.todo_list.models.WeatherStatus;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public record TaskCreateResponse (
         @NotNull
@@ -19,7 +19,7 @@ public record TaskCreateResponse (
         TaskStatus taskStatus,
 
         @NotNull
-        LocalDate createDate,
+        LocalDateTime createDate,
 
         @NotNull
         Boolean isOutdoor,
