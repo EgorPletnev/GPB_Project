@@ -5,4 +5,4 @@ public record UserEditResponse(
         String email,
         String name,
         String surname
-) { }
+) {}

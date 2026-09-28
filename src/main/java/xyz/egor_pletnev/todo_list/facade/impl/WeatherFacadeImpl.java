@@ -8,7 +8,6 @@ import xyz.egor_pletnev.todo_list.dto.OpenMeteoResponse;
 import xyz.egor_pletnev.todo_list.facade.WeatherFacade;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
 @Component
@@ -16,11 +15,10 @@ import java.time.temporal.ChronoUnit;
 @RequiredArgsConstructor
 public class WeatherFacadeImpl implements WeatherFacade {
     private final RestClient weatherRestClient;
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:00");
 
     @Override
-    public OpenMeteoResponse getOpenMeteoWeather(Double lat, Double lon, LocalDateTime date) { //TODO: сделать получение date без форматирования
-        String hourStr = date.truncatedTo(ChronoUnit.HOURS).format(FORMATTER);
+    public OpenMeteoResponse getOpenMeteoWeather(Double lat, Double lon, LocalDateTime date) {
+        String hourStr = date.truncatedTo(ChronoUnit.HOURS).toString();
 
         log.info("Запрос погоды: lat={}, lon={}, hour={}", lat, lon, hourStr);
 
@@ -36,9 +34,20 @@ public class WeatherFacadeImpl implements WeatherFacade {
                 .retrieve()
                 .body(OpenMeteoResponse.class);
 
-        if (response == null || response.hourly() == null || //TODO: разделить условие на более мелкие
-                response.hourly().weatherCode().isEmpty() || response.hourly().temperature().isEmpty()) {
-            throw new RuntimeException("Не удалось получить данные о погоде от сервиса");
+        if (response == null) {
+            throw new RuntimeException("Не удалось получить данные о погоде от сервиса: пустой ответ");
+        }
+
+        if (response.hourly() == null) {
+            throw new RuntimeException("Не удалось получить данные о погоде от сервиса: отсутствует блок почасовых данных");
+        }
+
+        if (response.hourly().weatherCode().isEmpty()) {
+            throw new RuntimeException("Не удалось получить данные о погоде от сервиса: отсутствует код погоды");
+        }
+
+        if (response.hourly().temperature().isEmpty()) {
+            throw new RuntimeException("Не удалось получить данные о погоде от сервиса: отсутствует температура");
         }
 
         return response;

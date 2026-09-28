@@ -51,36 +51,5 @@ public enum WeatherStatus {
         }
         return WeatherStatus.UNKNOWN;
 
-//        return switch (code) { // TODO: сравнить быстродействие
-//            case 0 -> CODE_0;
-//            case 1 -> CODE_1;
-//            case 2 -> CODE_2;
-//            case 3 -> CODE_3;
-//            case 45 -> CODE_45;
-//            case 48 -> CODE_48;
-//            case 51 -> CODE_51;
-//            case 53 -> CODE_53;
-//            case 55 -> CODE_55;
-//            case 56 -> CODE_56;
-//            case 57 -> CODE_57;
-//            case 61 -> CODE_61;
-//            case 63 -> CODE_63;
-//            case 65 -> CODE_65;
-//            case 66 -> CODE_66;
-//            case 67 -> CODE_67;
-//            case 71 -> CODE_71;
-//            case 73 -> CODE_73;
-//            case 75 -> CODE_75;
-//            case 77 -> CODE_77;
-//            case 80 -> CODE_80;
-//            case 81 -> CODE_81;
-//            case 82 -> CODE_82;
-//            case 85 -> CODE_85;
-//            case 86 -> CODE_86;
-//            case 95 -> CODE_95;
-//            case 96 -> CODE_96;
-//            case 99 -> CODE_99;
-//            default -> UNKNOWN;
-//        };
     }
 }

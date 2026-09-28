@@ -16,7 +16,7 @@ public interface TaskRepository extends JpaRepository<Task, String> { // TODO: Ñ
             (CASE WHEN :byStatus = true THEN t.status END) ASC,
             (CASE WHEN :byPriority = true THEN t.priority END) DESC,
             (CASE WHEN :byDate = true THEN t.dueDate END) ASC,
-            t.createdAt DESÐ¡
+            t.createdAt DESC
     """)
     List<Task> findTasksWithOrder(
             @Param("byStatus") boolean byStatus,

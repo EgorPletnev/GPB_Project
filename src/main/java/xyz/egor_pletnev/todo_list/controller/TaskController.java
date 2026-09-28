@@ -15,29 +15,29 @@ import xyz.egor_pletnev.todo_list.service.TaskService;
 @RequestMapping("/api/tasks")
 @RequiredArgsConstructor
 public class TaskController {
+
     private final TaskService taskService;
 
-
-    @ApiResponse(responseCode = "200", description = "Задача успешно создана")
     @Operation(summary = "Создание задачи")
+    @ApiResponse(responseCode = "200", description = "Задача успешно создана")
     @PostMapping
     public ResponseEntity<TaskCreateResponse> createTask(
             @Parameter(description = "Новая задача", required = true)
+            @Valid
             @RequestBody
             TaskCreateRequest request
     ) {
-
         return ResponseEntity
                 .ok()
                 .body(taskService.createTask(request));
     }
 
-
-    @ApiResponse(responseCode = "200", description = "Задача успешно отредактирована")
     @Operation(summary = "Редактирование задачи по id")
+    @ApiResponse(responseCode = "200", description = "Задача успешно отредактирована")
     @PatchMapping("/{id}")
     public ResponseEntity<TaskEditResponse> editTask(
             @Parameter(description = "Отредактированные данные задачи", required = true)
+            @Valid
             @RequestBody
             TaskEditRequest request
     ) {
@@ -46,14 +46,15 @@ public class TaskController {
                 .body(taskService.editTask(request));
     }
 
+    @Operation(summary = "Удаление задачи по id")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "Задача успешно удалена"),
             @ApiResponse(responseCode = "404", description = "Задача не найдена")
     })
-    @Operation(summary = "Удаление задачи по id")
     @DeleteMapping
     public ResponseEntity<TaskDeleteResponse> deleteTasks(
             @Parameter(description = "Список id задач для удаления", required = true)
+            @Valid
             @RequestBody
             TaskDeleteRequest request
     ) {
@@ -62,16 +63,14 @@ public class TaskController {
                 .body(taskService.deleteTasks(request));
     }
 
-
-    @ApiResponse(responseCode = "200", description = "Задачи успешно возвращены")
     @Operation(summary = "Возвращает задачи отсортированные по фильтрам")
+    @ApiResponse(responseCode = "200", description = "Задачи успешно возвращены")
     @GetMapping
     public ResponseEntity<GetTasksResponse> getAllTasks(
             @Valid
             @ModelAttribute
             TaskFilterRequest filter
     ) {
-
         return ResponseEntity
                 .ok()
                 .body(taskService.getTasks(filter));

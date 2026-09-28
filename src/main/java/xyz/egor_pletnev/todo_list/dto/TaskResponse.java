@@ -21,4 +21,4 @@ public record TaskResponse(
         Double forecastTemp,
         LocalDateTime dueDate,
         LocalDateTime createdAt
-) { }
+) {}

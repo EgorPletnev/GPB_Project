@@ -12,15 +12,14 @@ import xyz.egor_pletnev.todo_list.dto.UserEditResponse;
 import xyz.egor_pletnev.todo_list.service.UserService;
 
 @RestController
-@RequestMapping(path = "/api/users")
+@RequestMapping("/api/users")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
 
-    // Стоит ли разделить смену email и других параметров?
-    @ApiResponse(responseCode = "200", description = "Данные пользователя отредактированы")
     @Operation(summary = "Редактирование данных пользователя")
+    @ApiResponse(responseCode = "200", description = "Данные пользователя отредактированы")
     @PatchMapping
     public ResponseEntity<UserEditResponse> editUser(
             @Parameter(description = "Новые данные пользователя", required = true)
@@ -28,18 +27,17 @@ public class UserController {
             @RequestBody
             UserEditRequest request
     ) {
-
         UserEditResponse response = userService.editUser(request);
         return ResponseEntity
                 .ok()
                 .body(response);
     }
 
-
-    @ApiResponse(responseCode = "200", description = "Пользователь удалён")
     @Operation(summary = "Удаление аккаунта пользователя")
+    @ApiResponse(responseCode = "200", description = "Пользователь удалён")
     @DeleteMapping
     public ResponseEntity<?> deleteUser() {
+        // TODO: сделать UserDeleteResponse пустым
         return ResponseEntity.ok().build();
-    } // TODO: сделать UserDeleteResponse пустым
+    }
 }

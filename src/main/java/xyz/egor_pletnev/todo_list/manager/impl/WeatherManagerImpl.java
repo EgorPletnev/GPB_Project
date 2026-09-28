@@ -11,10 +11,11 @@ import xyz.egor_pletnev.todo_list.models.WeatherStatus;
 
 import java.time.LocalDateTime;
 
-@Component
 @Slf4j
+@Component
 @RequiredArgsConstructor
 public class WeatherManagerImpl implements WeatherManager {
+
     private final WeatherFacade weatherFacade;
 
     @Override

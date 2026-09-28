@@ -4,6 +4,7 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import xyz.egor_pletnev.todo_list.dto.UserEditRequest;
 import xyz.egor_pletnev.todo_list.dto.UserEditResponse;
 import xyz.egor_pletnev.todo_list.models.User;
@@ -14,9 +15,11 @@ import xyz.egor_pletnev.todo_list.service.UserService;
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
 
     @Override
+    @Transactional
     public UserEditResponse editUser(UserEditRequest request) {
         User user = userRepository
                 .findById(request.id())

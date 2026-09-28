@@ -3,10 +3,9 @@ package xyz.egor_pletnev.todo_list.service.impl;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springdoc.core.service.RequestBodyService;
-import org.springdoc.webmvc.core.service.RequestService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import xyz.egor_pletnev.todo_list.TaskMapper;
 import xyz.egor_pletnev.todo_list.dto.*;
 import xyz.egor_pletnev.todo_list.manager.WeatherManager;
 import xyz.egor_pletnev.todo_list.models.Task;
@@ -16,21 +15,17 @@ import xyz.egor_pletnev.todo_list.repository.TaskRepository;
 import xyz.egor_pletnev.todo_list.repository.UserRepository;
 import xyz.egor_pletnev.todo_list.service.TaskService;
 
-
 import java.util.List;
-
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
+
     private final WeatherManager weatherManager;
     private final TaskRepository taskRepository;
     private final UserRepository userRepository;
-
-    private final RequestBodyService requestBodyBuilder;
-
-    private final RequestService requestBuilder;
+    private final TaskMapper taskMapper;
 
     @Override
     @Transactional
@@ -40,7 +35,6 @@ public class TaskServiceImpl implements TaskService {
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден: " + request.userId()));
 
         Task savedTask = new Task();
-
         savedTask.setUser(user);
         savedTask.setTitle(request.title());
         savedTask.setDescription(request.description());
@@ -55,7 +49,6 @@ public class TaskServiceImpl implements TaskService {
         savedTask.setRequiredWeather(request.requiredWeather());
         savedTask.setForecastWeather(request.forecastWeather());
         savedTask.setForecastTemp(request.forecastTemp());
-
 
         savedTask = taskRepository.save(savedTask);
 
@@ -74,6 +67,7 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public TaskEditResponse editTask(TaskEditRequest request) {
         Task editTask = taskRepository
                 .findById(request.id())
@@ -110,13 +104,13 @@ public class TaskServiceImpl implements TaskService {
             editTask.setRequiredWeather(request.requiredWeather());
         }
 
-        // Проверка на уличную задачу, если задача уличная проверяет наличие данные о текущей погоде(если есть, то задаёт их, если нет, то запрашивает у сервиса погоды)
+        // Проверка на уличную задачу: если задача уличная, проверяет наличие данных о текущей погоде
+        // (если есть, то задаёт их, если нет — запрашивает у сервиса погоды)
         if (Boolean.TRUE.equals(editTask.getIsOutdoor())) {
             if (request.forecastWeather() != null && request.forecastTemp() != null) {
                 editTask.setForecastWeather(request.forecastWeather());
                 editTask.setForecastTemp(request.forecastTemp());
-            }
-            else {
+            } else {
                 WeatherResponse weatherResponse = weatherManager.getWeather(
                         editTask.getLatitude(),
                         editTask.getLongitude(),
@@ -126,8 +120,6 @@ public class TaskServiceImpl implements TaskService {
                 editTask.setForecastWeather(weatherResponse.condition());
                 editTask.setForecastTemp(weatherResponse.temperature());
             }
-
-
         }
 
         Task savedTask = taskRepository.save(editTask);
@@ -147,8 +139,9 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
+    @Transactional
     public TaskDeleteResponse deleteTasks(TaskDeleteRequest request) {
-        //TODO: через некоторое время задачи со статусом DELETED удалять из бд
+        // TODO: через некоторое время задачи со статусом DELETED удалять из бд
         List<Task> tasksToDelete = taskRepository.findAllById(request.ids());
 
         tasksToDelete.forEach(task -> task.setStatus(TaskStatus.DELETED));
@@ -165,38 +158,16 @@ public class TaskServiceImpl implements TaskService {
     @Override
     @Transactional(readOnly = true)
     public GetTasksResponse getTasks(TaskFilterRequest request) {
-
         List<Task> tasks = taskRepository.findTasksWithOrder(
                 request.filterByStatus(),
                 request.filterByPriority(),
                 request.filterByDate()
         );
 
-        List<TaskResponse> taskResponses = tasks
-                .stream()
-                .map(this::toTaskResponse)
+        List<TaskResponse> taskResponses = tasks.stream()
+                .map(taskMapper::taskToTaskResponseDTO)
                 .toList();
 
         return new GetTasksResponse(taskResponses);
-    }
-
-    private TaskResponse toTaskResponse(Task task) {
-        return new TaskResponse(
-                task.getId(),
-                task.getTitle(),
-                task.getDescription(),
-                task.getPriority(),
-                task.getStatus(),
-                task.getIsOutdoor(),
-                task.getRequiredWeather(),
-                task.getLatitude(),
-                task.getLongitude(),
-                task.getMinTemp(),
-                task.getMaxTemp(),
-                task.getForecastWeather(),
-                task.getForecastTemp(),
-                task.getDueDate(),
-                task.getCreatedAt()
-        );
     }
 }
